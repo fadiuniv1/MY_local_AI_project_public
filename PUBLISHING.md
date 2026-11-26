@@ -9,7 +9,7 @@ history is not automatically scrubbed by deleting files in a new commit.
 - Old commits contain the Tailscale IP in `build.gradle.kts` and docs. That is an
   internal endpoint, not a credential, but if you want it gone from history:
   1. In a fresh clone, run `git filter-repo --sensitive-data-removal --replace-text`
-     with a file containing `100.67.146.29==<tailscale-ip>`.
+     with a file containing `<tailscale-ip>==<placeholder>`.
   2. Force-push all refs, then re-clone elsewhere.
 - Enable GitHub secret scanning and push protection after publication.
 
