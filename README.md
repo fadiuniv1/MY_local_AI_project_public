@@ -1,0 +1,108 @@
+# MY local AI — Android Agent Client
+
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=black)
+![Tailscale](https://img.shields.io/badge/Tailscale-242424?style=flat-square&logo=tailscale&logoColor=white)
+![Tests](https://github.com/fadiuniv1/MY_local_AI_project/actions/workflows/test.yml/badge.svg)
+
+A Jetpack Compose Android app that talks to an **Agent Bridge** over Tailscale. The
+conversation is the task surface: you type a request, the agent works on the Ubuntu PC,
+and tool activity appears inline — no separate "create task" form in the main flow.
+
+```text
+Android Client (Jetpack Compose) ──(Tailscale)──▶ Agent Bridge (:8081) ──▶ Ollama (:11434)
+        │                                          │
+        ├─▶ Room DB (schema v3) & DataStore         ├─▶ SQLite (jobs, sessions, memory)
+        └─▶ WorkManager (completion & notifications)
+```
+
+## Features
+
+### Execution & streaming
+- Async chat jobs (`POST /api/chat/jobs`) with a stable `Idempotency-Key`; no duplicate jobs on retry.
+- Live SSE progress with reconnect and event backfill; `token` events stream into the answer.
+- Inline tool activity (`tool_started` / `tool_result`), 15 s heartbeats, one "Working… · Xs" header.
+- Direct mode by default (inline file/command/research work); durable task delegation is opt-in.
+
+### Session continuity
+- Server-backed session memory: goal, workspace, touched files, decisions, last successful turn.
+- Referential follow-ups ("enhance it", "the website") continue the same task in the same workspace.
+- Per-chat task shown in the header and drawer; **Continue last task** button.
+- Prompt queue: send several prompts while one runs; `⏳ N` in the top bar, reorder/cancel panel; queue persists.
+
+### Control & safety
+- Plan preview before work; small-model review sub-agent; Undo for file writes.
+- Per-tool allow-list, notification preferences, command approval dialog.
+- Optional `X-Bridge-Token` auth configured from `.env`.
+- Clean final answers: no raw tool dumps, no fake success claims.
+
+### Files, diffs & downloads
+- Whole-PC file browser with root toggle, read/write/copy/move/delete/upload/download.
+- Download notifications + in-chat status banner.
+- Clickable file chips (preview, copy path, browser), inline unified diff cards.
+- Python/JS/HTML verification results inline.
+- Chat export via share sheet; message deletion.
+
+### Resilience
+- Offline hold/reconnect with the same key; jobs restore on app start, reconnect and tab switch.
+- Cancelling the phone's tracker no longer kills the PC job.
+
+## Architecture
+
+| Layer | Files |
+| :--- | :--- |
+| **UI** | `MainActivity.kt`, `ui/ChatViewModel.kt`, `ui/components/*` |
+| **Data** | `data/ChatRepository.kt`, `data/remote/ApiService.kt`, `data/local/*`, `data/PreferencesRepository.kt` |
+| **Models** | `model/ApiModels.kt`, `ChatMessage.kt`, `SessionStateDto.kt`, `QueuedPromptData.kt`, `AgentExtras.kt` |
+| **Background** | `worker/*`, `notification/*` |
+| **CLI** | `cli/agent_cli.py` — original MIT terminal client |
+| **Connectivity** | `network/NetworkMonitor.kt`, `MyLocalAIApplication.kt` |
+
+## Build & test
+
+```powershell
+Get-Process java,javaw -ErrorAction SilentlyContinue | Stop-Process -Force
+.\gradlew.bat :app:compileDebugKotlin :app:testDebugUnitTest :app:assembleDebug --no-daemon --max-workers=1
+```
+
+- Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
+- Unit tests: **30 tests**, 0 failures. CI runs them on push/PR.
+
+## Configuration
+
+Copy `.env.example` to `.env` and set `REMOTE_API_BASE_URL` (your Tailscale bridge URL),
+optionally `BRIDGE_TOKEN`, `CLI_MODEL`. `.env` is gitignored; nothing sensitive is committed.
+
+```bash
+curl -s http://<tailscale-ip>:8081/api/health
+curl -s http://<tailscale-ip>:8081/api/version
+```
+
+## Publishing
+
+See `PUBLISHING.md` (history cleaning before going public), `NEEDS.md` (what is still
+needed from the user), `SECURITY.md`, `LICENSE` and `CHANGELOG.md`.
+
+## Languages / RTL
+- Settings → Language: System default, English, **עברית**, **العربية**.
+- Full Hebrew and Arabic translations of all UI strings; RTL layout is enabled.
+- The selected language is sent to the bridge so final answers are localized.
+
+## Verified status (2026-11-26)
+- Android: 30/30 unit tests pass, debug APK builds, CI green.
+- Bridge: 76/76 unit tests, `smoke_test.py` 11/11 checks, SQLite integrity OK.
+- Repos pushed to `master` (app) and `main` (server); no secrets in tracked files.
+
+## Screenshots
+
+Screenshots are staged in [`docs/screenshots/`](docs/screenshots/) — see that folder for
+the expected filenames. Once the image files are added, this section will embed them.
+The shared screenshots already demonstrate the Ubuntu PC menu, settings, empty state,
+per-tab task drawer, collapsed no-op replies and the `Continuing:` header.
+
+## Troubleshooting
+
+- **JVM OOM:** stop stale `java` processes and use `--no-daemon --max-workers=1`; retry once.
+- **No task memory:** ensure the bridge exposes `GET /api/session-state` and the APK is current.
+- **On-device logs:** `adb logcat -s MyLocalAI:D` — IDs/statuses only, never prompt content.
