@@ -3,7 +3,11 @@
 Everything code-side is implemented, tested and pushed. These are the only items
 that require your decision or input.
 
-## 1. Make the GitHub repos public? (IMPORTANT — needs your decision)
+## 1. Fresh repos created (Option A) — DONE
+New clean repos `MY_local_AI_project_public` and `agent-bridge-public` were pushed with
+single-commit history and tag `v1.0.0`. See `PUBLIC_RELEASE.md` for the remaining manual
+steps (archive old repos, rename if wanted, flip public, create release). No history
+rewrite was performed on the old repos. Original notes below:
 Both repos are currently **private**. Their current trees are clean, but **old commits
 still contain internal data**:
 - `agent-bridge`: 3 commits touched `sessions.db` (real chat data) and logs.
@@ -50,7 +54,9 @@ page, send me:
 - optional 1280×640 feature graphic.
 I cannot capture the phone screen myself; I'll embed what you send.
 
-## 4. Release signing (optional, for distribution outside Android Studio)
+## 4. Release signing — NOT NEEDED (no Play Store for now)
+Debug APK from Android Studio is sufficient. No keystore required at this time.
+Original note below:
 Debug APK works today. For a signed release I need a keystore path + alias/password,
 or permission to generate one locally (it stays gitignored).
 
