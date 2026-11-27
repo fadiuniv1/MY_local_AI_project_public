@@ -1,71 +1,59 @@
-# What I need from you to go further (2026-11-26)
+# Inputs still needed from the user (2026-11-27)
 
-Everything code-side is implemented, tested and pushed. These are the only items
-that require your decision or input.
+Everything code-side is implemented, tested, published and verified. The items below
+are the only ones that need you; all earlier decisions are recorded as done.
 
-## 1. Fresh repos created (Option A) — DONE
-New clean repos `MY_local_AI_project_public` and `agent-bridge-public` were pushed with
-single-commit history and tag `v1.0.0`. See `PUBLIC_RELEASE.md` for the remaining manual
-steps (archive old repos, rename if wanted, flip public, create release). No history
-rewrite was performed on the old repos. Original notes below:
-Both repos are currently **private**. Their current trees are clean, but **old commits
-still contain internal data**:
-- `agent-bridge`: 3 commits touched `sessions.db` (real chat data) and logs.
-- `MY_local_AI_project`: old commits contain the Tailscale IP and IDE files.
+## 1. Screenshots (only real remaining input)
+Chat images are not exposed to the agent as files. Save the screenshots into
+`docs/screenshots/` with the names in `docs/screenshots/README.md`:
 
-Deleting from HEAD does not remove history. Choose one:
-- **(a) Fresh repository** from the current clean tree (safest — archive old repos).
-- **(b)** I run `git filter-repo` in a fresh clone and force-push (rewrites hashes,
-  coordinate any collaborators).
-- **(c)** Keep them private — nothing else is required.
+- `chat.png` — chat thread with tool cards and final answer
+- `queue.png` — queue panel (⏳ N)
+- `empty-state.png` — quick actions
+- `settings.png` — connection & model settings
+- `ubuntu-menu.png` — Ubuntu PC menu
+- `feature-graphic.png` — optional 1280×640 banner
 
-Tell me a/b/c. I will not rewrite shared history without your go-ahead.
+Then they can be embedded in the README. Tracked as app issue #1.
 
-## 2. Fast free cloud model — DONE (Groq key supplied and configured)
-`cloud:fast` and `cloud:strong` are active on the bridge and verified live. No action needed.
-Original notes below kept for reference:
-All free tiers require a **free API key** — no reliable anonymous endpoint exists.
-Recommended: Groq (no card, 30 req/min, 1k req/day, 8k tokens/min):
-1. Get a key at https://console.groq.com/keys
-2. On the Ubuntu host:
-   ```bash
-   sudo systemctl edit agent-bridge
-   # [Service]
-   # Environment=CLOUD_BASE_URL=https://api.groq.com/openai/v1
-   # Environment=CLOUD_API_KEY=YOUR_KEY
-   # Environment=CLOUD_FAST_MODEL=openai/gpt-oss-20b
-   # Environment=CLOUD_STRONG_MODEL=openai/gpt-oss-120b
-   sudo systemctl daemon-reload && sudo systemctl restart agent-bridge
-   curl -s http://<tailscale-ip>:8081/api/cloud/status
-   ```
-Alternatives: Gemini AI Studio (free Flash models; prompts may be used for training),
-OpenRouter `:free` models (50 req/day). Without this, local Ollama remains fully functional.
+## 2. Optional: back up the signing keystore
+The release APK was signed with `Temp\opencode\my-local-ai.jks` (gitignored config in
+`keystore.properties`). If that temp directory is cleaned, the exact published
+signature cannot be reproduced. Copy both files somewhere safe if you care about
+future signed updates using the same identity.
 
-## 3. Screenshots — you shared them in chat, but I need the files
-I can see the screenshots but chat images are not exposed to me as files. Please save
-them into `docs/screenshots/` with the names listed in `docs/screenshots/README.md`
-(`chat.png`, `queue.png`, `empty-state.png`, `settings.png`, `ubuntu-menu.png`). Then I
-can embed them in the README. No code images are needed — the launcher icon exists.
-Original note below:
-The app already has a custom launcher icon — no code images needed. For a nicer GitHub
-page, send me:
-- 1–2 phone screenshots of the chat (tool cards + final answer),
-- 1 screenshot of the queue panel (⏳ N → tap),
-- optional 1280×640 feature graphic.
-I cannot capture the phone screen myself; I'll embed what you send.
+## 3. Optional: rename the public repos
+Both old repos are archived, so the original names are effectively free. Renaming
+`MY_local_AI_project_public` → `MY_local_AI_project` and `agent-bridge-public` →
+`agent-bridge` would require updating local remotes and docs. Not required.
 
-## 4. Release signing — NOT NEEDED (no Play Store for now)
-Debug APK from Android Studio is sufficient. No keystore required at this time.
-Original note below:
-Debug APK works today. For a signed release I need a keystore path + alias/password,
-or permission to generate one locally (it stays gitignored).
+## 4. Optional: 2FA on the publishing GitHub account
+Account-level setting, not repo-level. Confirm in GitHub Settings → Security.
 
-## 5. Hebrew/Arabic quality
-The app UI is fully translated with RTL layout. The local 1.5B model often answers in
-English; the bridge adds a localized marker (`תשובה:` / `الإجابة:`) as a fallback.
-Fully fluent RTL answers need the free cloud key from item 2.
+## Already decided and done (no action needed)
 
-## Verification status
-- App: 34/34 tests (3× runs), APK builds, git clean after this cleanup commit.
-- Server: 79/79 tests (3× runs), smoke 11/11 (2× runs), service enabled at boot.
-- Both repos pushed; no credentials in current trees.
+- **Fresh repos (Option A):** published with clean history; old repos private + archived.
+- **Free cloud model:** Groq key configured in a root-only systemd drop-in on the
+  Ubuntu host; `cloud:fast` / `cloud:strong` verified. Never committed or pasted in chat.
+- **Signed APK:** built, signature verified with `apksigner`, attached to `v1.0.0`.
+- **Releases / secret scanning / push protection / branch protection / private
+  vulnerability reporting:** all enabled and verified via the GitHub API.
+- **Repository hygiene:** issue templates, PR template and `SECURITY.md` reporting link.
+- **Hebrew/Arabic UI:** complete; local model answers get an RTL marker, cloud models
+  give fully fluent replies. Further local-model improvement tracked as app issue #4.
+
+## Reference: optional cloud configuration (host only)
+
+```bash
+sudo systemctl edit agent-bridge
+# [Service]
+# Environment=CLOUD_BASE_URL=https://api.groq.com/openai/v1
+# Environment=CLOUD_API_KEY=<key stored only here, mode 0600>
+# Environment=CLOUD_FAST_MODEL=openai/gpt-oss-20b
+# Environment=CLOUD_STRONG_MODEL=openai/gpt-oss-120b
+sudo systemctl daemon-reload && sudo systemctl restart agent-bridge
+curl -s http://<tailscale-ip>:8081/api/cloud/status
+```
+
+Without a key the bridge is fully local via Ollama. Free alternatives: Gemini AI Studio
+(flash models, prompts may be used for training) and OpenRouter `:free` (50 req/day).
