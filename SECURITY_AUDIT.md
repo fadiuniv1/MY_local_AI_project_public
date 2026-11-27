@@ -68,9 +68,9 @@ No release exists yet.
 
 ### Do now (blocking public-readiness)
 - [x] Confirm both CI badges green after workflow fixes
-- [ ] Create GitHub release + attach standalone installer
-- [ ] Enable secret scanning / push protection
-- [ ] Enable branch protection on `main` (both repos)
+- [x] Create GitHub release + attach standalone installer (done via GitHub API)
+- [x] Enable secret scanning / push protection (done via GitHub API)
+- [x] Enable branch protection on `main` (both repos, done via GitHub API)
 - [ ] Archive the two old private repos
 - [ ] Confirm public clone builds/tests pass (commands above)
 
