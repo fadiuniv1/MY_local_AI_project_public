@@ -65,7 +65,7 @@ git filter-repo --sensitive-data-removal --invert-paths \
   --path-glob '*.bak-*'
 
 # App: replace the hard-coded IP everywhere
-echo '100.67.146.29==<tailscale-ip>' > /tmp/replacements.txt
+echo 'YOUR_TAILSCALE_IP==<tailscale-ip>' > /tmp/replacements.txt
 git filter-repo --sensitive-data-removal --replace-text /tmp/replacements.txt
 
 # Force push all refs
