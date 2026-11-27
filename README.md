@@ -88,6 +88,9 @@ See `PUBLIC_RELEASE.md` for the published `v1.0.0` signed APK and bridge install
 - Settings → Language: System default, English, **עברית**, **العربية**.
 - Full Hebrew and Arabic translations of all UI strings; RTL layout is enabled.
 - The selected language is sent to the bridge so final answers are localized.
+- For fluent **local** Hebrew/Arabic, install `ollama pull gemma3:4b` on the bridge host;
+  the bridge routes `he`/`ar` chat to it automatically and falls back to the usual local
+  models when it is not installed. No cloud key is required.
 
 ## Verified status (2026-11-27)
 - Android: 34/34 unit tests pass in a fresh public clone, release APK builds, CI green.
