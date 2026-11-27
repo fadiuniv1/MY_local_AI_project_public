@@ -4,7 +4,7 @@
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=flat-square&logo=android&logoColor=black)
 ![Tailscale](https://img.shields.io/badge/Tailscale-242424?style=flat-square&logo=tailscale&logoColor=white)
-![Tests](https://github.com/fadiuniv1/MY_local_AI_project/actions/workflows/test.yml/badge.svg)
+![Tests](https://github.com/fadiuniv1/MY_local_AI_project_public/actions/workflows/test.yml/badge.svg)
 
 A Jetpack Compose Android app that talks to an **Agent Bridge** over Tailscale. The
 conversation is the task surface: you type a request, the agent works on the Ubuntu PC,
@@ -67,7 +67,7 @@ Get-Process java,javaw -ErrorAction SilentlyContinue | Stop-Process -Force
 ```
 
 - Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
-- Unit tests: **30 tests**, 0 failures. CI runs them on push/PR.
+- Unit tests: **34 tests**, 0 failures. CI runs them on push/PR.
 
 ## Configuration
 
@@ -81,25 +81,34 @@ curl -s http://<tailscale-ip>:8081/api/version
 
 ## Publishing
 
-See `PUBLISHING.md` (history cleaning before going public), `NEEDS.md` (what is still
-needed from the user), `SECURITY.md`, `LICENSE` and `CHANGELOG.md`.
+See `PUBLIC_RELEASE.md` for the published `v1.0.0` signed APK and bridge installer,
+`SECURITY_AUDIT.md` for the verified final state, `SECURITY.md`, `LICENSE` and `CHANGELOG.md`.
 
 ## Languages / RTL
 - Settings → Language: System default, English, **עברית**, **العربية**.
 - Full Hebrew and Arabic translations of all UI strings; RTL layout is enabled.
 - The selected language is sent to the bridge so final answers are localized.
 
-## Verified status (2026-11-26)
-- Android: 30/30 unit tests pass, debug APK builds, CI green.
-- Bridge: 76/76 unit tests, `smoke_test.py` 11/11 checks, SQLite integrity OK.
-- Repos pushed to `master` (app) and `main` (server); no secrets in tracked files.
+## Verified status (2026-11-27)
+- Android: 34/34 unit tests pass in a fresh public clone, release APK builds, CI green.
+- Bridge: 81/81 unit tests and `smoke_test.py` 11/11 checks in a fresh public clone.
+- Both public repos on `main` at `v1.0.0`; no secrets in tracked files.
 
 ## Screenshots
 
-Screenshots are staged in [`docs/screenshots/`](docs/screenshots/) — see that folder for
-the expected filenames. Once the image files are added, this section will embed them.
-The shared screenshots already demonstrate the Ubuntu PC menu, settings, empty state,
-per-tab task drawer, collapsed no-op replies and the `Continuing:` header.
+<p align="center">
+  <img src="docs/screenshots/chat.png" width="230" alt="Chat thread with inline results">
+  <img src="docs/screenshots/chat-details.png" width="230" alt="Tool details and review actions">
+  <img src="docs/screenshots/empty-state.png" width="230" alt="Empty state and quick actions">
+</p>
+<p align="center">
+  <img src="docs/screenshots/settings.png" width="230" alt="Connection and model settings">
+  <img src="docs/screenshots/sessions.png" width="230" alt="Per-tab session memory drawer">
+  <img src="docs/screenshots/ubuntu-menu.png" width="230" alt="Ubuntu PC menu">
+</p>
+
+Internal Tailscale addresses and home-directory paths in the original screenshots were
+replaced with placeholders before publishing.
 
 ## Troubleshooting
 
