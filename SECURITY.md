@@ -1,8 +1,13 @@
 # Security policy
 
 ## Reporting
-Please open a private issue or contact the maintainer directly rather than posting
-exploits publicly. Include reproduction steps and affected versions.
+**Please do not open a public issue for a vulnerability.**
+
+Use GitHub private vulnerability reporting instead:
+https://github.com/fadiuniv1/MY_local_AI_project_public/security/advisories/new
+
+Include reproduction steps, affected versions and the impact. You will receive a
+private channel to discuss the report and coordinate a fix before disclosure.
 
 ## What this app does
 This Android client drives a self-hosted Ubuntu "Agent Bridge" over Tailscale. The
