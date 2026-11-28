@@ -96,7 +96,7 @@ See `PUBLIC_RELEASE.md` for the published `v1.0.0` signed APK and bridge install
 
 ## Verified status (2026-11-27)
 - Android: 38/38 unit tests pass, release APK builds, CI green.
-- Bridge: 90/90 unit tests and `smoke_test.py` 11/11 checks in a fresh public clone.
+- Bridge: 91/91 unit tests and `smoke_test.py` 11/11 checks in a fresh public clone.
 - Both public repos on `main` at `v1.0.0`; no secrets in tracked files.
 
 ## Screenshots
