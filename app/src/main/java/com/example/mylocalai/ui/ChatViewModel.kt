@@ -2830,7 +2830,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                                 ?: response?.error?.takeIf(String::isNotBlank)
                                 ?: response?.message?.content?.takeIf(String::isNotBlank)
                                 ?: "The agent job ended with status '${status.status}'."
-                            Log.w("MyLocalAI", "chat job $requestId ${status.status}: $errorText")
+                            // Full error/answer text can contain prompts, PC paths and command
+                            // output. Keep it in the UI message only, never in logcat.
+                            Log.w("MyLocalAI", "chat job $requestId ${status.status} failed (${errorText.length} chars)")
                             val label = when (status.status) {
                                 "failed" -> "The agent job failed"
                                 "cancelled" -> "The agent job was cancelled"

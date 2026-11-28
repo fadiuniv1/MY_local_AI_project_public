@@ -30,6 +30,14 @@ class FileChipExtractionTest {
     }
 
     @Test
+    fun keepsHomePrefixInTildePaths() {
+        assertEquals(
+            listOf("~/Desktop/site/index.html"),
+            extractMentionedFilePaths("Done: ~/Desktop/site/index.html")
+        )
+    }
+
+    @Test
     fun returnsEmptyForPlainChat() {
         assertEquals(emptyList<String>(), extractMentionedFilePaths("Tailscale is a VPN."))
     }

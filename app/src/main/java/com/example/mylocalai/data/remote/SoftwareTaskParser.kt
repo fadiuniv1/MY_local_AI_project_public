@@ -59,7 +59,9 @@ object SoftwareTaskParser {
                 )
             }
         }
-        val next = root.optLong("next_after_id", events.maxOfOrNull { it.id } ?: cursor)
+        // Never trust a stale/lower server cursor: re-fetching delivered events wastes
+        // polling bandwidth forever when the server reports next_after_id = 0.
+        val next = maxOf(root.optLong("next_after_id", cursor), events.maxOfOrNull { it.id } ?: cursor)
         return SoftwareTaskEventsPage(events, next.coerceAtLeast(cursor))
     }
 

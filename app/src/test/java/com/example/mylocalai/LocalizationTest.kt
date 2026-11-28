@@ -42,6 +42,8 @@ class LocalizationTest {
         assertEquals("New chat", base["nav_new_chat"])
         assertTrue(he["nav_new_chat"]!!.contains("שיחה"))
         assertTrue(ar["nav_new_chat"]!!.contains("محادثة"))
+        assertTrue("Untranslated Hebrew string: settings_debug",
+            he["settings_debug"] != base["settings_debug"])
     }
 
     @Test

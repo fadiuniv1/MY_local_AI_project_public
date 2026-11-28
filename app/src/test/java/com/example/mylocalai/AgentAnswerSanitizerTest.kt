@@ -115,6 +115,23 @@ class AgentAnswerSanitizerTest {
     }
 
     @Test
+    fun keepsContentAfterAnUnclosedCodeFence() {
+        val raw = """
+            Here is the script:
+
+            ```python
+            print("hello")
+            The answer continues after the truncated fence.
+        """.trimIndent()
+
+        val clean = AgentAnswerSanitizer.sanitize(raw)
+
+        assertTrue(clean.contains("```python"))
+        assertTrue(clean.contains("print(\"hello\")"))
+        assertTrue(clean.contains("The answer continues after the truncated fence."))
+    }
+
+    @Test
     fun handlesEmptyAndWhitespaceOnlyText() {
         assertEquals("", AgentAnswerSanitizer.sanitize(""))
         assertEquals("   ", AgentAnswerSanitizer.sanitize("   "))

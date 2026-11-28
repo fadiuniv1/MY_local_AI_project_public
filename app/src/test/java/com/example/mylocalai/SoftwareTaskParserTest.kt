@@ -68,6 +68,22 @@ class SoftwareTaskParserTest {
     }
 
     @Test
+    fun parseEvents_neverRegressCursor() {
+        val json = """
+            {
+                "events": [
+                    { "id": 1, "type": "start", "message": "Task started" },
+                    { "id": 2, "type": "step", "message": "Step 1 complete" }
+                ],
+                "next_after_id": 0
+            }
+        """.trimIndent()
+
+        val page = SoftwareTaskParser.parseEvents(json, cursor = 0L)
+        assertEquals(2L, page.nextAfterId)
+    }
+
+    @Test
     fun parseDiff_handlesUntrackedFilesAndDiff() {
         val json = """
             {

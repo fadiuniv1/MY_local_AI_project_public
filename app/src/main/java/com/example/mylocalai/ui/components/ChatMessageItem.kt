@@ -65,7 +65,7 @@ import com.example.mylocalai.ui.theme.UserBubbleColor
 
 /** Extract distinct absolute PC file paths from agent prose, for inline preview chips. */
 internal fun extractMentionedFilePaths(text: String): List<String> {
-    return Regex("(/[A-Za-z0-9_./-]+\\.(?:html|yaml|json|csv|java|cpp|log|txt|kt|py|sh|md|css|js|ts|xml|yml|h))(?![A-Za-z0-9])")
+    return Regex("(~?/[A-Za-z0-9_./-]+\\.(?:html|yaml|json|csv|java|cpp|log|txt|kt|py|sh|md|css|js|ts|xml|yml|h))(?![A-Za-z0-9])")
         .findAll(text)
         .map { it.value.trimEnd('.', ',', ')', ']', '"', '\'') }
         .distinct()

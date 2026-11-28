@@ -67,12 +67,14 @@ Get-Process java,javaw -ErrorAction SilentlyContinue | Stop-Process -Force
 ```
 
 - Debug APK: `app/build/outputs/apk/debug/app-debug.apk`
-- Unit tests: **34 tests**, 0 failures. CI runs them on push/PR.
+- Unit tests: **38 tests**, 0 failures. CI runs them on push/PR.
 
 ## Configuration
 
 Copy `.env.example` to `.env` and set `REMOTE_API_BASE_URL` (your Tailscale bridge URL),
-optionally `BRIDGE_TOKEN`, `CLI_MODEL`. `.env` is gitignored; nothing sensitive is committed.
+optionally `BRIDGE_TOKEN`. The Android app reads only these two values; `CLI_MODEL` belongs
+to `cli/agent_cli.py` and cloud keys belong on the bridge host (see the bridge `RELEASE.md`).
+`.env` is gitignored; nothing sensitive is committed.
 
 ```bash
 curl -s http://<tailscale-ip>:8081/api/health
@@ -93,8 +95,8 @@ See `PUBLIC_RELEASE.md` for the published `v1.0.0` signed APK and bridge install
   models when it is not installed. No cloud key is required.
 
 ## Verified status (2026-11-27)
-- Android: 34/34 unit tests pass in a fresh public clone, release APK builds, CI green.
-- Bridge: 81/81 unit tests and `smoke_test.py` 11/11 checks in a fresh public clone.
+- Android: 38/38 unit tests pass, release APK builds, CI green.
+- Bridge: 90/90 unit tests and `smoke_test.py` 11/11 checks in a fresh public clone.
 - Both public repos on `main` at `v1.0.0`; no secrets in tracked files.
 
 ## Screenshots

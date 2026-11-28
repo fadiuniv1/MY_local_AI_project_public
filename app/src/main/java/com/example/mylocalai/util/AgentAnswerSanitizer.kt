@@ -69,6 +69,12 @@ object AgentAnswerSanitizer {
             }
             kept.add(raw)
         }
+        // A truncated answer can end inside a real code fence. Keep what we have
+        // instead of silently dropping everything after the opening fence.
+        if (fenceOpen != null && !fenceIsToolOutput) {
+            kept.add(fenceOpen!!)
+            kept.addAll(fenceBuffer)
+        }
         return kept.joinToString("\n").trim()
     }
 }

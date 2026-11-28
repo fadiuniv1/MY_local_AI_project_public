@@ -1,5 +1,6 @@
 package com.example.mylocalai
 
+import com.example.mylocalai.data.remote.JobResponseParser
 import com.example.mylocalai.model.AsyncChatJobCreated
 import com.example.mylocalai.model.AsyncChatJobEvent
 import com.example.mylocalai.model.AsyncChatJobEventsPage
@@ -10,10 +11,18 @@ import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AsyncChatJobParserTest {
+
+    @Test
+    fun jobResponseParser_rejectsNullFieldsWithoutThrowing() {
+        assertNull(JobResponseParser.parse("""{"job":{"job_id":null,"status":"running"}}"""))
+        assertNull(JobResponseParser.parse("""{"job":{"job_id":"req-1","status":null}}"""))
+        assertNotNull(JobResponseParser.parse("""{"job":{"job_id":"req-1","status":"running"}}"""))
+    }
 
     @Test
     fun asyncChatJobCreated_deserializes202Body() {

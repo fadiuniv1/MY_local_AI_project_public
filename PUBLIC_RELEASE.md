@@ -26,7 +26,7 @@ chmod +x agent-bridge-install.sh
 ```
 The script extracts embedded files, installs dependencies and Ollama (optional), sets
 up the restricted sudoers rule, creates and enables the systemd service at boot, runs
-all 81 tests, and prints health URLs.
+all 90 tests, and prints health URLs.
 
 Optional environment overrides: `BIND_IP`, `PORT`, `BRIDGE_API_TOKEN`, `CLOUD_BASE_URL`,
 `CLOUD_API_KEY`, `CLOUD_FAST_MODEL`, `CLOUD_STRONG_MODEL`, `INSTALL_OLLAMA=0`,

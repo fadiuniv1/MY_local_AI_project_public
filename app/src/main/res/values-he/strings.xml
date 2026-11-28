@@ -37,7 +37,7 @@
     <string name="settings_notifications">התראות</string>
     <string name="settings_tools">כלים מותרים לסוכן</string>
     <string name="settings_cloud">מודלים בענן</string>
-    <string name="settings_debug">debugging</string>
+    <string name="settings_debug">ניפוי באגים</string>
     <string name="settings_language">שפה</string>
     <string name="lang_system">ברירת מחדל של המערכת</string>
     <string name="lang_en">English</string>
